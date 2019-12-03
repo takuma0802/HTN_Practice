@@ -1,0 +1,35 @@
+@startuml
+
+namespace WorldState{
+
+}
+
+namespace HTNDomain{
+    interface HTNTask
+    abstract class PrimitiveTask{
+        + List<Action> Preconditions
+        + List<Action> Effects
+        + Operator Operator
+    }
+
+    abstract class Operator{
+        + Excute(state)
+        + Excute(state,T1)
+    }
+
+    abstract class Method{
+        + List<Action> Preconditions
+    }
+
+}
+
+namespace Planner{
+
+}
+
+namespace Sensors{
+
+}
+
+
+@enduml
