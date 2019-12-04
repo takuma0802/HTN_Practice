@@ -4,6 +4,7 @@ using UnityEngine;
 
 public abstract class Method
 {
-    public IList<ITask> SubTasks;
+    protected List<ITask> subTasks;
+    public List<ITask> SubTasks { get { return subTasks; } }
     public abstract bool IsSatisfiedPreConditions(WorldState currentState);
 }

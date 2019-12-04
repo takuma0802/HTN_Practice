@@ -10,5 +10,5 @@ public class WorldState : MonoBehaviour
         set { MeatNumber = value; }
     }
 
-    public GameObject pos;
+    public GameObject FocusOfAttention;
 }

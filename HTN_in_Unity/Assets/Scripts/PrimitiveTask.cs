@@ -11,9 +11,6 @@ public abstract class PrimitiveTask : ITask
     protected TaskType taskType;
     public TaskType TaskType { get { return taskType; } }
 
-    public List<Action> Preconditions;
-    public Operator TaskOperator;
-
     public PrimitiveTask()
     {
         taskType = TaskType.PrimitiveTask;
@@ -24,4 +21,5 @@ public abstract class PrimitiveTask : ITask
 
     // タスクを実行した結果、変更されたWorldStateを返す
     public abstract WorldState ApplyEffectsToWorldState(WorldState previousState);
+    public abstract Operator GetOperator(WorldState previousState);
 }

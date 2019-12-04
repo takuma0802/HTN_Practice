@@ -18,4 +18,9 @@ public class EatMeatTask : PrimitiveTask
     {
         return previousState;
     }
+
+    public override Operator GetOperator(WorldState previousState)
+    {
+        return new EatMeatOperator();
+    }
 }

@@ -19,4 +19,14 @@ public class MoveToTask : PrimitiveTask
     {
         return previousState;
     }
+
+    public override Operator GetOperator(WorldState currentState)
+    {
+        return new MoveToOperator(currentState.FocusOfAttention.transform.position);
+    }
+
+    public System.Type GetaOperator(WorldState currentState)
+    {
+        return typeof(MoveToOperator);
+    }
 }
