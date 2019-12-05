@@ -7,7 +7,6 @@ public class MoveToTask : PrimitiveTask
     private Vector3 targetPos;
     public MoveToTask() : base()
     {
-        taskName = "MoveTo";
     }
 
     public override bool IsSatisfiedPreConditions(WorldState currentState)

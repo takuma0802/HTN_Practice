@@ -7,16 +7,13 @@ public class PrepareMeatTask : CompoundTask
 {
     public PrepareMeatTask() : base()
     {
-        taskName = "PrepareMeat";
         Methods.Add(new PrepareMeatMethod1());
     }
 
-    public override Method FindSatisfiedMethod(WorldState currentState)
-    {
-        var satisfiedMethod = Methods.FirstOrDefault((method => method.IsSatisfiedPreConditions(currentState)));
+    // public override Method FindSatisfiedMethod(WorldState currentState)
+    // {
 
-        return satisfiedMethod;
-    }
+    // }
 
     public class PrepareMeatMethod1 : Method
     {

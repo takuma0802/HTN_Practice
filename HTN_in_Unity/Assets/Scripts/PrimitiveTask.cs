@@ -5,7 +5,6 @@ using System;
 
 public abstract class PrimitiveTask : ITask
 {
-    protected string taskName;
     public string TaskName { get { return taskName; } }
 
     protected TaskType taskType;

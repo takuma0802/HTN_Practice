@@ -6,7 +6,6 @@ public class EatMeatTask : PrimitiveTask
 {
     public EatMeatTask() : base()
     {
-        taskName = "EatMeat";
     }
 
     public override bool IsSatisfiedPreConditions(WorldState currentState)

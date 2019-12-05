@@ -10,6 +10,6 @@ public enum TaskType
 
 public interface ITask
 {
-    string TaskName { get; }
     TaskType TaskType { get; }
+
 }

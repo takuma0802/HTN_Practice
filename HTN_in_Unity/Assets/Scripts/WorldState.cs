@@ -2,8 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WorldState : MonoBehaviour
+public class WorldState
 {
+    private AIBase owner;
+    public WorldState(AIBase owner)
+    {
+        this.owner = owner;
+    }
+
     public int MeatNumber
     {
         get { return MeatNumber; }
