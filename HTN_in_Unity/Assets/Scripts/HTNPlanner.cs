@@ -35,18 +35,17 @@ public class PlannerBase<T> : IPlanner where T : AIBase
         return ReturnPlanList_internal(worldState);
     }
 
-    protected List<PrimitiveTask> ReturnPlanList_internal(WorldState virtualWorldState)
+    protected List<PrimitiveTask> ReturnPlanList_internal(WorldState virtualWS)
     {
         while (taskListToProcess.Count > 0)
         {
             if (taskListToProcess[0].TaskType == TaskType.PrimitiveTask)
             {
                 var nextTask = taskListToProcess[0] as PrimitiveTask;
-                var isSatisfied = nextTask.IsSatisfiedPreConditions(virtualWorldState);
+                var isSatisfied = nextTask.IsSatisfiedPreConditions(virtualWS);
                 if (isSatisfied)
                 {
-                    taskListToProcess.RemoveAt(0);
-                    finalPlanList.Add(nextTask);
+                    virtualWS = FoundSatisfiedPrimitiveTask(nextTask, virtualWS);
                 }
                 else
                 {
@@ -56,12 +55,10 @@ public class PlannerBase<T> : IPlanner where T : AIBase
             else if (taskListToProcess[0].TaskType == TaskType.CompoundTask)
             {
                 var nextTask = taskListToProcess[0] as CompoundTask;
-                var satisfiedMethod = nextTask.FindSatisfiedMethod(virtualWorldState);
+                var satisfiedMethod = nextTask.FindSatisfiedMethod(virtualWS);
                 if (satisfiedMethod != null)
                 {
-                    taskListToProcess.RemoveAt(0);
-                    taskListToProcess.InsertRange(0, satisfiedMethod.SubTasks);
-                    RecordDecompositionOfTask(nextTask);
+                    FoundSatisfiedCompoundTask(nextTask, satisfiedMethod);
                 }
                 else
                 {
@@ -69,16 +66,31 @@ public class PlannerBase<T> : IPlanner where T : AIBase
                 }
             }
         }
-
         return finalPlanList;
     }
 
-    public void RecordDecompositionOfTask(CompoundTask nextTask)
+    protected WorldState FoundSatisfiedPrimitiveTask(PrimitiveTask task, WorldState virtualWS)
+    {
+        taskListToProcess.RemoveAt(0);
+        finalPlanList.Add(task);
+        virtualWS = task.ApplyEffectsToWorldState(virtualWS);
+        return virtualWS;
+    }
+
+    protected void FoundSatisfiedCompoundTask(CompoundTask task, Method satisfiedMethod)
+    {
+        taskListToProcess.RemoveAt(0);
+        taskListToProcess.InsertRange(0, satisfiedMethod.SubTasks);
+        RecordDecompositionOfTask(task);
+    }
+
+
+    protected void RecordDecompositionOfTask(CompoundTask nextTask)
     {
         compoundTaskHistory.Add(nextTask);
     }
 
-    public void RestoreToLastDecomposedTask()
+    protected void RestoreToLastDecomposedTask()
     {
         compoundTaskHistory.RemoveAt(compoundTaskHistory.Count - 1);
         taskListToProcess.Insert(0, compoundTaskHistory.LastOrDefault());

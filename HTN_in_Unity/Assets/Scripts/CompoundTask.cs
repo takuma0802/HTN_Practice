@@ -8,7 +8,7 @@ public abstract class CompoundTask : ITask
     protected TaskType taskType;
     public TaskType TaskType { get { return taskType; } }
 
-    public IList<Method> Methods;
+    protected IList<Method> Methods;
 
     public CompoundTask()
     {
