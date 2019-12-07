@@ -11,7 +11,7 @@ public class MoveToOperator : Operator
         this.targetPos = targetPos;
     }
 
-    public override void Execute(WorldState state)
+    public override void Execute(IWorldState state)
     {
         Debug.Log("Eat Meat!");
     }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public abstract class PrimitiveTask : ITask
+public abstract class PrimitiveTask<T> : TaskBase where T : IWorldState
 {
     protected TaskType taskType;
     public TaskType TaskType { get { return taskType; } }
@@ -14,9 +14,12 @@ public abstract class PrimitiveTask : ITask
     }
 
     // 自分のタスクを実行できるかどうかを返す
-    public abstract bool IsSatisfiedPreConditions(WorldState currentState);
+    public override bool CheckPreCondition(IWorldState state) { return IsSatisfiedPreConditions((T)state); }
+    public abstract bool IsSatisfiedPreConditions(T currentState);
 
     // タスクを実行した結果、変更されたWorldStateを返す
-    public abstract WorldState ApplyEffectsToWorldState(WorldState previousState);
-    public abstract Operator GetOperator(WorldState previousState);
+    public override IWorldState ApplyEffects(IWorldState state) { return ApplyEffectsToWorldState((T)state); }
+    public abstract IWorldState ApplyEffectsToWorldState(T previousState);
+
+    //public abstract Operator GetOperator(T previousState);
 }

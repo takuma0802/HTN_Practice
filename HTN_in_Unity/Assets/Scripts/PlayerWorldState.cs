@@ -2,19 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WorldState
+public class PlayerWorldState : IWorldState
 {
     private AIBase owner;
-    public WorldState(AIBase owner)
+
+    public PlayerWorldState(AIBase owner)
     {
         this.owner = owner;
     }
 
-    public int MeatNumber
+    public IWorldState Clone()
     {
-        get { return MeatNumber; }
-        set { MeatNumber = value; }
+        return new PlayerWorldState(owner);
     }
+
+    public int MeatNumber;
 
     public GameObject FocusOfAttention;
 }

@@ -4,7 +4,18 @@ using UnityEngine;
 
 public abstract class Method
 {
-    protected List<ITask> subTasks;
-    public List<ITask> SubTasks { get { return subTasks; } }
-    public abstract bool IsSatisfiedPreConditions(WorldState currentState);
+    public List<TaskBase> SubTasks = new List<TaskBase>();
+    public List<PreConditionBase> PreConditions = new List<PreConditionBase>();
+
+    public bool CheckPreCondition(IWorldState state)
+    {
+        foreach(var preCondition in PreConditions)
+        {
+            if(!preCondition.CheckPreCondition(state))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
 }

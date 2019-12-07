@@ -2,30 +2,26 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MoveToTask : PrimitiveTask
+public class MoveToTask : PrimitiveTask<PlayerWorldState>
 {
     private Vector3 targetPos;
     public MoveToTask() : base()
     {
     }
 
-    public override bool IsSatisfiedPreConditions(WorldState currentState)
+    public override bool IsSatisfiedPreConditions(PlayerWorldState currentState)
     {
-        return currentState.MeatNumber > 0;
+        return true;
     }
 
-    public override WorldState ApplyEffectsToWorldState(WorldState previousState)
+    public override IWorldState ApplyEffectsToWorldState(PlayerWorldState previousState)
     {
+        previousState.MeatNumber++;
         return previousState;
     }
 
-    public override Operator GetOperator(WorldState currentState)
-    {
-        return new MoveToOperator(currentState.FocusOfAttention.transform.position);
-    }
-
-    public System.Type GetaOperator(WorldState currentState)
-    {
-        return typeof(MoveToOperator);
-    }
+    // public override Operator GetOperator(PlayerWorldState currentState)
+    // {
+    //     return new MoveToOperator(currentState.FocusOfAttention.transform.position);
+    // }
 }

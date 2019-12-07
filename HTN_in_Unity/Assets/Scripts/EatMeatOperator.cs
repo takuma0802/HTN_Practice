@@ -6,7 +6,7 @@ public class EatMeatOperator : Operator
 {
 
     public EatMeatOperator(){ }
-    public override void Execute(WorldState state)
+    public override void Execute(IWorldState state)
     {
         Debug.Log("Eat Meat!");
     }

@@ -8,25 +8,29 @@ public class PrepareMeatTask : CompoundTask
     public PrepareMeatTask() : base()
     {
         Methods.Add(new PrepareMeatMethod1());
+        Methods.Add(new PrepareMeatMethod2());
     }
-
-    // public override Method FindSatisfiedMethod(WorldState currentState)
-    // {
-
-    // }
 
     public class PrepareMeatMethod1 : Method
     {
         public PrepareMeatMethod1()
         {
-            subTasks = new List<ITask>();
-            subTasks.Add(new EatMeatTask());
-            subTasks.Add(new MoveToTask());
-        }
+            SubTasks.Add(new EatMeatTask());
+            SubTasks.Add(new MoveToTask());
 
-        public override bool IsSatisfiedPreConditions(WorldState currentState)
+            PreConditions.Add(new EatMeatPreCondition());
+        }
+    }
+
+    public class PrepareMeatMethod2 : Method
+    {
+        public PrepareMeatMethod2()
         {
-            return currentState.MeatNumber > 0;
+            SubTasks = new List<TaskBase>();
+            SubTasks.Add(new MoveToTask());
+            SubTasks.Add(new EatMeatTask());
+
+            //PreConditions.Add(new EatMeatPreCondition());
         }
     }
 }

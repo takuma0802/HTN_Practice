@@ -4,10 +4,10 @@ using UnityEngine;
 
 public interface IOperator
 {
-    void Execute(WorldState state);
+    void Execute(IWorldState state);
 }
 
 public abstract class Operator : MonoBehaviour
 {
-    public abstract void Execute(WorldState state);
+    public abstract void Execute(IWorldState state);
 }
