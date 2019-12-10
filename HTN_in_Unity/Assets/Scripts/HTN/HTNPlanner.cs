@@ -21,30 +21,27 @@ public class HTNPlanner
         }
     }
 
-    private AIBase owner;
-    private TaskBase defaultRootTask;
+
     private PlannerState plannerState;
     private List<PlannerState> plannerStateHistory = new List<PlannerState>();
 
-    public HTNPlanner(AIBase owner, TaskBase rootTask)
+    public HTNPlanner()
     {
-        this.owner = owner;
-        this.defaultRootTask = rootTask;
     }
 
-    public List<TaskBase> Planning(IWorldState currentState)
+    public List<TaskBase> Planning(IWorldState currentState, TaskBase rootTask)
     {
         plannerStateHistory.Clear();
         plannerState = new PlannerState(
             currentState.Clone(),
             new List<TaskBase>(),
-            new List<TaskBase>() { defaultRootTask },
+            new List<TaskBase>() { rootTask },
             0);
 
         while (plannerState.TaskListToProcess.Count > 0)
         {
             var currentTask = plannerState.TaskListToProcess[0];
-            Debug.Log("currentTask:" + currentTask);
+            Debug.Log("CurrentTask:" + currentTask);
             if (currentTask is CompoundTask currentCompoundTask)
             {
                 var satisfiedMethod = FindSatisfiedMethod(currentCompoundTask, plannerState);
@@ -53,11 +50,9 @@ public class HTNPlanner
                     RecordDecompositionOfTask(currentCompoundTask);
                     plannerState.TaskListToProcess.RemoveAt(0);
                     plannerState.TaskListToProcess.InsertRange(0, satisfiedMethod.SubTasks);
-                    Debug.Log("MethoCount:" + satisfiedMethod.SubTasks.Count);
                 }
                 else
                 {
-                    Debug.Log("CompoundRestore");
                     RestoreToLastDecomposedTask();
                 }
             }
@@ -65,39 +60,32 @@ public class HTNPlanner
             {
                 if (currentTask.CheckPreCondition(plannerState.WorkingWS))
                 {
-                    Debug.Log("AddPrimitive:" + currentTask);
                     plannerState.TaskListToProcess.RemoveAt(0);
                     plannerState.FinalPlanList.Add(currentTask);
                     plannerState.WorkingWS = currentTask.ApplyEffects(plannerState.WorkingWS);
                 }
                 else
                 {
-                    Debug.Log("PrimitiveRestore");
                     RestoreToLastDecomposedTask();
                 }
             }
-            Debug.Log("TaskList:" + plannerState.TaskListToProcess.Count);
         }
 
         return new List<TaskBase>(plannerState.FinalPlanList);
     }
 
     /// <summary>
-    /// currentCompoundTaskが保有しているMethodの中から、現在のWorldStateに合致するMethodを返す。
+    /// CompoundTaskが保有しているMethodの中から、現在のWorldStateに合致するMethodを返す。
     /// なければ、nullを返す。
     /// </summary>
-    public Method FindSatisfiedMethod(CompoundTask currentCompoundTask, PlannerState plannerState)
+    private Method FindSatisfiedMethod(CompoundTask currentCompoundTask, PlannerState plannerState)
     {
-        Debug.Log("FindSatisfy:" + currentCompoundTask);
         var methodsWorldState = plannerState.WorkingWS.Clone();
         var methods = currentCompoundTask.Methods;
         while (plannerState.NextMethodNumber < methods.Count)
         {
             var method = methods[plannerState.NextMethodNumber];
             plannerState.NextMethodNumber++;
-
-            Debug.Log("method:" + method);
-            Debug.Log("NextNuber:" + plannerState.NextMethodNumber);
 
             if (method.CheckPreCondition(methodsWorldState))
             {
@@ -144,13 +132,10 @@ public class HTNPlanner
 
         copyOfPlannerState.TaskListToProcess.Add(nextCompoundTask);
         plannerStateHistory.Add(copyOfPlannerState);
-        Debug.Log("RecordTask:" + nextCompoundTask);
-        Debug.Log("History:" + plannerStateHistory);
     }
 
     private void RestoreToLastDecomposedTask()
     {
-        Debug.Log("Restore");
         // これ以上過去のPlannerStateに遡れない場合、Planningを終了させる
         if (plannerStateHistory.Count == 0)
         {
@@ -160,6 +145,5 @@ public class HTNPlanner
 
         plannerState = plannerStateHistory.Last();
         plannerStateHistory.RemoveAt(plannerStateHistory.Count - 1);
-        Debug.Log("HistoryCount:" + plannerStateHistory.Count);
     }
 }
