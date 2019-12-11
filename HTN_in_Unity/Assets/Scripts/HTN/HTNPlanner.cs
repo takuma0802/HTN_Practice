@@ -91,29 +91,6 @@ public class HTNPlanner
             {
                 return method;
             }
-
-            // // Methodの事前条件を満たさない場合、次のMethodを検証
-            // if (!method.CheckPreCondition(currentState))
-            // {
-            //     nextMethodNumber++;
-            //     continue;
-            // }
-            // // CompoundTaskの中のTask
-            // var satisfyAllTaskFlag = true;
-            // foreach(var task in method.SubTasks)
-            // {
-            //     if(!task.CheckPreCondition(methodsWorldState))
-            //     {
-            //         satisfyAllTaskFlag = false;
-            //         break;
-            //     }
-            //     methodsWorldState = task.ApplyEffects(methodsWorldState);
-            // }
-
-            // if(satisfyAllTaskFlag)
-            // {
-
-            // }
         }
 
         return null;
